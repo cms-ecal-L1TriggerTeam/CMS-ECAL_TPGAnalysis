@@ -8,6 +8,7 @@ Get the CMSSW release area
 ```bash
 cmsrel CMSSW_7_5_6
 cd CMSSW_7_5_6/src
+cmsenv
 ```
 
 Checkout the repository
