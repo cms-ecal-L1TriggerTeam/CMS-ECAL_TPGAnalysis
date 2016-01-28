@@ -1,0 +1,26 @@
+
+cd  /afs/cern.ch/work/n/ndev/CMSSW_7_5_6/src/
+eval `scramv1 runtime -sh`;
+cd -;
+echo ""
+echo "TPGTreeReader running on all triggers..."
+echo ""
+echo _test_package
+echo ""
+/afs/cern.ch/work/n/ndev/CMSSW_7_5_6/bin/slc6_amd64_gcc491/TPGTreeReader -SLMinEvt  -SLMaxEvt  -SLMinOrb  -SLMaxOrb  -SLMaxTime  -SLMinTime  -d root://eoscms.cern.ch//eos/cms/store/user/ndev/TPG/ECALTPG_tree -i ECALTPGtree_test_package_254833.root -o newhistoTPG_254833_test_package_eg12.root -l1bx 47,49,50,51,52,53  -g /afs/cern.ch/work/n/ndev/CMSSW_7_5_6/src/CMS-ECAL_TPGAnalysis/TPGPlotting/plots/endcapGeometry.txt -EG 12 
+cmsStage -f newhistoTPG_254833_test_package_eg12.root /store/user/ndev/TPG/histofiles/
+mv newhistoTPG_254833_test_package_eg12.root /afs/cern.ch/work/n/ndev/CMSSW_7_5_6/src/CMS-ECAL_TPGAnalysis/TPGPlotting/plots/.
+echo ""
+echo "TPGTreeReader running on Ecal triggers..."
+/afs/cern.ch/work/n/ndev/CMSSW_7_5_6/bin/slc6_amd64_gcc491/TPGTreeReader -SLMinEvt  -SLMaxEvt  -SLMinOrb  -SLMaxOrb  -SLMaxTime  -SLMinTime  -d root://eoscms.cern.ch//eos/cms/store/user/ndev/TPG/ECALTPG_tree -i ECALTPGtree_test_package_254833.root -o newhistoTPG_Ecal_254833_test_package_eg12.root -l1 47,49,50,51,52,53  -l1bx 47,49,50,51,52,53 -g /afs/cern.ch/work/n/ndev/CMSSW_7_5_6/src/CMS-ECAL_TPGAnalysis/TPGPlotting/plots/endcapGeometry.txt -EG 12 
+cmsStage -f newhistoTPG_Ecal_254833_test_package_eg12.root /store/user/ndev/TPG/histofiles/
+mv newhistoTPG_Ecal_254833_test_package_eg12.root /afs/cern.ch/work/n/ndev/CMSSW_7_5_6/src/CMS-ECAL_TPGAnalysis/TPGPlotting/plots/.
+
+
+echo ""
+echo "Now producing plots..."
+echo 'cd /afs/cern.ch/work/n/ndev/CMSSW_7_5_6/src/CMS-ECAL_TPGAnalysis/TPGPlotting/plots'
+echo 'in the TPGdirecotry?'
+echo './makeTPGPlots.sh -r 254833 -l /afs/cern.ch/work/n/ndev/CMSSW_7_5_6/src/CMS-ECAL_TPGAnalysis/Scripts/TriggerAnalysis/Commissioning2016 -p /ndev/TPGAnalysis/2016/Beam -e 12 -z _test_package_eg12'
+cd /afs/cern.ch/work/n/ndev/CMSSW_7_5_6/src/CMS-ECAL_TPGAnalysis/TPGPlotting/plots
+./makeTPGPlots.sh -r 254833 -l /afs/cern.ch/work/n/ndev/CMSSW_7_5_6/src/CMS-ECAL_TPGAnalysis/Scripts/TriggerAnalysis/Commissioning2016 -p /ndev/TPGAnalysis/2016/Beam -e 12 -z _test_package_eg12
