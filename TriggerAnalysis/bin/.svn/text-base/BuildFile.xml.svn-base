@@ -1,0 +1,5 @@
+<bin   name="TPGTreeReader" file="TPGTreeReader.cpp">
+#<bin   name="TPGTreeReaderFAN" file="TPGTreeReaderFAN.cpp">
+  <use   name="CaloOnlineTools/EcalTools"/>
+  <flags   LCGDICT_ARGS="--deep"/>
+</bin>
