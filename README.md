@@ -22,9 +22,9 @@ BEFORE YOU RUN, you need to make sure you change the directory/path names to you
 
  `cd Scripts/TriggerAnalysis`
 
-In particular the files you need to modify are : mergeTPGAnalysis.sh; makeTrigPrimPlots.sh ; convertAllPlots.py ;produceplotonCAFqueues.sh 
+In particular the files you need to modify are : `mergeTPGAnalysis.sh; makeTrigPrimPlots.sh ; convertAllPlots.py ;produceplotonCAFqueues.sh `
 
-  `cd ../../TPGPlotting/plots` and also modify path in makeTPGPlots.sh
+  `cd ../../TPGPlotting/plots` and also modify path in `makeTPGPlots.sh`
 
 (what follows is to be modified- Nabarun)
        
