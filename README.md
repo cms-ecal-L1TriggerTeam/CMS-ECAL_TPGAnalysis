@@ -7,7 +7,10 @@ How to run:
 
 
 `cd CMSSW_7_5_6/src`
+
 `git cms-init`
+
 `git clone https://github.com/cms-ecal-L1TriggerTeam/CMS-ECAL_TPGAnalysis.git`
+
 `scram b`
 ` 
