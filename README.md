@@ -20,7 +20,7 @@ scram b
 
 BEFORE YOU RUN, you need to make sure you change the directory/path names to your directories or directories you want results in.
 
- `cd Scripts/TriggerAnalysis`
+ `cd CMS-ECAL_TPGAnalysis/Scripts/TriggerAnalysis`
 
 In particular the files you need to modify are : `mergeTPGAnalysis.sh; makeTrigPrimPlots.sh ; convertAllPlots.py ;produceplotonCAFqueues.sh `
 
