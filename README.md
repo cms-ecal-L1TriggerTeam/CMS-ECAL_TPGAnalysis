@@ -29,6 +29,24 @@ In particular the files you need to modify are : `mergeTPGAnalysis.sh; makeTrigP
   
   
   ###Running the analysis
+  This has been tested on lxplus. After you have changed all the pathnames above:
+  
+  To run, e.g. on 254833 ZeroBias dataset
+  ```./runTPGbatch_AAA.sh lxbatch 254833 /ZeroBias/Run2015C-v1/RAW  74X_dataRun2_Express_v1  -1 False```
+  
+  i.e.`./runTPGbatch_AAA.sh  lxbatch  run_number  das_dataset_path Global_Tag  Num_of_events_to_be_processed(-1 defaults to all events) MC_or_data(False for data)`
+  
+  This will run the jobs on the queue "cmscaf1nd", If you do not have permissions to run on the queue modify runTPGbatch_AAA.sh and change `queue=cmscaf1nd` appropiately
+  
+  To locally test if jobs are running:
+  `cd log_and_results
+  cmsRun runTPG_cfg_2.py`
+  
+  Once jobs are done, merge the output files.
+  `./mergeTPGAnalysis.sh -r 254833 -m log_and_results/254833-_ZeroBias_Run2015C-v1_RAW-batch/results/ -a testing`
+  
+  `-a` option is optional for
+  
   
 
 (what follows is to be modified- Nabarun)
