@@ -49,6 +49,11 @@ echo "TPGPLOTTINGDIR ${TPGPLOTTINGDIR}"
 APPENDIX=""
 OPTIONS=""
 
+if [ "X"${ADDENDUM} != "X" ]
+    then
+    ADDENDUM="_"$ADDENDUM     
+fi
+
 if [ "X"${EG} != "X" ] 
    then
    APPENDIX=$APPENDIX$ADDENDUM"_eg"$EG

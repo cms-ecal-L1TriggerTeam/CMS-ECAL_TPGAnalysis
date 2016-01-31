@@ -41,16 +41,15 @@ fi
 
 
 #to distingusih between several files produced from the same input run with different parameters etc.
-if [ "X"${addendum} == "X" ]
+if [ "X"${addendum} != "X" ]
     then
-    echo $usage
-    exit 
+    addendum="_"$addendum     
 fi
 
 
 echo 'Merging TPG Analysis output for run' ${run_num} 
 
-hadd -f ECALTPGtree_${addendum}_${run_num}.root ${merge_dir}/ECALTPGtree_*root
+hadd -f ECALTPGtree${addendum}_${run_num}.root ${merge_dir}/ECALTPGtree_*root
 
 if [ "X"${output_dir} == "X" ]
     then
@@ -63,10 +62,10 @@ if [ "X"${output_dir} == "X" ]
     	#rfcp ECALTPGtree_${addendum}_${run_num}.root ${output_dir}
     	#eos mkdir ${output_dir} 
     	#eos chmod 775 ${output_dir}
-        echo xrdcp -f ECALTPGtree_${addendum}_${run_num}.root ${output_root_dir}
-    	xrdcp -f ECALTPGtree_${addendum}_${run_num}.root ${output_root_dir} 
-        echo eos chmod 775 ${output_dir}/ECALTPGtree_${addendum}_${run_num}.root
-        $eos chmod 775 ${output_dir}/ECALTPGtree_${addendum}_${run_num}.root
+        echo xrdcp -f ECALTPGtree${addendum}_${run_num}.root ${output_root_dir}
+    	xrdcp -f ECALTPGtree${addendum}_${run_num}.root ${output_root_dir} 
+        echo eos chmod 775 ${output_dir}/ECALTPGtree${addendum}_${run_num}.root
+        $eos chmod 775 ${output_dir}/ECALTPGtree${addendum}_${run_num}.root
     	#rfchmod 775 ${output_dir}/ECALTPGtree_${addendum}_${run_num}.root
     else
    	 echo " using output dir "${output_dir}
@@ -75,10 +74,10 @@ if [ "X"${output_dir} == "X" ]
     	#rfcp ECALTPGtree_${addendum}_${run_num}.root ${output_dir}
    	 eosmkdir ${output_dir}
    	 eos chmod 775 ${output_dir}
-    	xrdcp ECALTPGtree_${addendum}_${run_num}.root ${output_dir} 
+    	xrdcp ECALTPGtree${addendum}_${run_num}.root ${output_dir} 
     	#rfchmod 775 ${output_dir}/ECALTPGtree_${addendum}_${run_num}.root
 fi
 
-size=`\ls -l ECALTPGtree_${addendum}_${run_num}.root | grep -c ${run_num}`;
+size=`\ls -l ECALTPGtree${addendum}_${run_num}.root | grep -c ${run_num}`;
 echo $size
 
