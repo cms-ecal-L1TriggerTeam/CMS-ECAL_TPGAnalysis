@@ -68,7 +68,7 @@ case "$mode" in
       echo "current dirctory"
       echo  $batchdir
       echo "the end"
-#      bsub -q ${queue} batch_job_${s}.sh -o /dev/null -e /dev/null
+  #    bsub -q ${queue} batch_job_${s}.sh -o /dev/null -e /dev/null
   #    source batch_job_${s}.sh
       cd -
     done

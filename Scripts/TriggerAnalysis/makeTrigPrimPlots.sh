@@ -2,6 +2,8 @@
 
 usage='Usage: -r <run number> ( -d <eos dir> -l <html dir> -p <http dir> -e <EG trigger value for L1> )'
 
+echo " "
+
 args=`getopt rdlp: -- "$@"`
 if test $? != 0
      then

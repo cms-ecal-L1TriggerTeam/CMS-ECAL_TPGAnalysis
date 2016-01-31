@@ -9,6 +9,8 @@ usage='Usage: -r <run number> -m <merge_dir> Example: ./mergeTPGAnalysis.sh -r 1
 
 eos='/afs/cern.ch/project/eos/installation/0.3.15/bin/eos.select'
 
+echo ""
+
 args=`getopt rowm: -- "$@"`
 if test $? != 0
      then
