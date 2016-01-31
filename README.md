@@ -34,7 +34,7 @@ In particular the files you need to modify are : `mergeTPGAnalysis.sh; makeTrigP
   To run, e.g. on 254833 ZeroBias dataset
   ```./runTPGbatch_AAA.sh lxbatch 254833 /ZeroBias/Run2015C-v1/RAW  74X_dataRun2_Express_v1  -1 False```
   
-  i.e.`./runTPGbatch_AAA.sh  lxbatch  run_number  das_dataset_path Global_Tag  Num_of_events_to_be_processed(-1 defaults to all events) MC_or_data(False for data)`
+  i.e.```./runTPGbatch_AAA.sh  lxbatch  run_number  das_dataset_path Global_Tag  Num_of_events_to_be_processed(-1 defaults to all events) MC_or_data(False for data)```
   
   This will run the jobs on the queue "cmscaf1nd", If you do not have permissions to run on the queue modify runTPGbatch_AAA.sh and change `queue=cmscaf1nd` appropiately
   
@@ -43,15 +43,22 @@ In particular the files you need to modify are : `mergeTPGAnalysis.sh; makeTrigP
   cmsRun runTPG_cfg_2.py`
   
   Once jobs are done, merge the output files.
-  `./mergeTPGAnalysis.sh -r 254833 -m log_and_results/254833-_ZeroBias_Run2015C-v1_RAW-batch/results/ -a testing`
+
+  ```./mergeTPGAnalysis.sh -r 254833 -m log_and_results/254833-_ZeroBias_Run2015C-v1_RAW-batch/results/ -a testing```
   
-  `-a` option is optional for
+  `-a` option is optional if u want run on the same set of data several times and want to call each merged output a different name
+
+  To make plots:`./makeTrigPrimPlots.sh -r 254833 -a testing`
+
+  The plots will be created in the folder: `Scripts/TriggerAnalysis/Commisioning2016`
   
+  To make thumbnails: `python convertAllPlots.py`
+
+  Copy it to your html_folder to look at it on the web.
   
 
-(what follows is to be modified- Nabarun)
        
-Then follow instructions on this twiki here:
+Somemore plotting options and instructions on this (partially outdated) twiki here:
 
 https://twiki.cern.ch/twiki/bin/viewauth/CMS/EcalPFGCode#Trigger_Primitive_Analysis
 
