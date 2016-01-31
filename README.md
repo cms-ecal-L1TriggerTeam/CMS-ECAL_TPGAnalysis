@@ -26,6 +26,10 @@ BEFORE YOU RUN, you need to make sure you change the directory/path names to you
 In particular the files you need to modify are : `mergeTPGAnalysis.sh; makeTrigPrimPlots.sh ; convertAllPlots.py ;produceplotonCAFqueues.sh `
 
   `cd ../../TPGPlotting/plots` and also modify path in `makeTPGPlots.sh`
+  
+  
+  ###Running the analysis
+  
 
 (what follows is to be modified- Nabarun)
        
