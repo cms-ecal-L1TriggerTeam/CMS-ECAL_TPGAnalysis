@@ -10,16 +10,16 @@ process.prefer("GlobalTag")
 #DB V1 : process.GlobalTag.globaltag = 'GR_E_V43::All'
 process.GlobalTag.globaltag = '%globaltag%'
 
-process.GlobalTag.toGet = cms.VPSet(
+#process.GlobalTag.toGet = cms.VPSet(
  #   cms.PSet(record = cms.string("EcalTPGLinearizationConstRcd"),
   #          tag = cms.string("EcalTPGLinearizationConst_IOV_262897_beginning_at_1"),
    #         connect =cms.string('frontier://FrontierPrep/CMS_CONDITIONS')
       #      ),
-    cms.PSet(record = cms.string("EcalTPGTowerStatusRcd"),
-             tag = cms.string("EcalTPGTowerStatus_confid722_plus_ebm10_tt64"),
-             connect =cms.string('frontier://FrontierPrep/CMS_CONDITIONS')
-             )
-)
+#    cms.PSet(record = cms.string("EcalTPGTowerStatusRcd"),
+ #            tag = cms.string("EcalTPGTowerStatus_confid722_plus_ebm10_tt64"),
+  #           connect =cms.string('frontier://FrontierPrep/CMS_CONDITIONS')
+  #           )
+#)
 #process.GlobalTag.toGet = cms.VPSet( #we are applying the masking.
 #    cms.PSet(record = cms.string("EcalTPGTowerStatusRcd"),
 #             tag = cms.string("EcalTPGTowerStatus_confid722_plus_ebm10_tt64"),
