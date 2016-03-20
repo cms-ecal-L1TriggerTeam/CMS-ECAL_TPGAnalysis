@@ -1,4 +1,4 @@
-# CMS-ECAL_TPGAnalysis (7_5_6)
+# CMS-ECAL_TPGAnalysis (8_0_2)
 
 ##This houses the latest version of the Level 1 Ecal TPG analysis of CMS
 ======================================================================
@@ -6,8 +6,8 @@ How to run:
 
 Get the CMSSW release area
 ```bash
-cmsrel CMSSW_7_5_6
-cd CMSSW_7_5_6/src
+cmsrel CMSSW_8_0_2
+cd CMSSW_8_0_2/src
 cmsenv
 ```
 
@@ -31,8 +31,8 @@ In particular the files you need to modify are : `mergeTPGAnalysis.sh; makeTrigP
   ###Running the analysis
   This has been tested on lxplus. After you have changed all the pathnames above:
   
-  To run, e.g. on 254833 ZeroBias dataset
-  ```./runTPGbatch_AAA.sh lxbatch 254833 /ZeroBias/Run2015C-v1/RAW  74X_dataRun2_Prompt_v1  -1 False```
+  To run, e.g. on 266423 ZeroBias dataset
+  ```./runTPGbatch_AAA.sh lxbatch 266423 /ZeroBias/Run2015C-v1/RAW  74X_dataRun2_Prompt_v1  -1 False```
   
   i.e.```./runTPGbatch_AAA.sh  lxbatch  run_number  das_dataset_path Global_Tag  Num_of_events_to_be_processed(-1 defaults to all events) MC_or_data(False for data)```
   
@@ -44,11 +44,11 @@ In particular the files you need to modify are : `mergeTPGAnalysis.sh; makeTrigP
   
   Once jobs are done, merge the output files.
 
-  ```./mergeTPGAnalysis.sh -r 254833 -m log_and_results/254833-_ZeroBias_Run2015C-v1_RAW-batch/results/ -a testing```
+  ```./mergeTPGAnalysis.sh -r 266423 -m log_and_results/266423-_ZeroBias_Run2015C-v1_RAW-batch/results/ -a testing```
   
   `-a` option is optional if u want run on the same set of data several times and want to call each merged output a different name
 
-  To make plots:`./makeTrigPrimPlots.sh -r 254833 -a testing`
+  To make plots:`./makeTrigPrimPlots.sh -r 266423 -a testing`
 
   The plots will be created in the folder: `Scripts/TriggerAnalysis/Commisioning2016`
   
