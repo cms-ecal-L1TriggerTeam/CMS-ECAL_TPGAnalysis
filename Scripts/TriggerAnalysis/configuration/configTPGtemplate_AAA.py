@@ -107,7 +107,7 @@ process.tpAnalyzer = cms.EDAnalyzer("EcalTPGAnalyzer",
                                     l1extraIsol = cms.InputTag("l1extraParticles","Isolated"),
                                     
                                     Print = cms.bool(False),
-                                    L1Print = cms.bool(True),
+                                    L1Print = cms.bool(False),
                                     ReadTriggerPrimitives = cms.bool(True),
 
                                     UseEndCap = cms.bool(True),
