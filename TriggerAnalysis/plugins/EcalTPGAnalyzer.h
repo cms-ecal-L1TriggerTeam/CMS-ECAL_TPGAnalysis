@@ -179,7 +179,8 @@ private:
   std::string gtRecordCollectionTag_ ;
   edm::InputTag EcalRecHitCollectionEB_;
   edm::InputTag EcalRecHitCollectionEE_;
-  edm::InputTag l1extraParticles_;
+  edm::InputTag l1extraIsol_;
+  edm::InputTag l1extraNonIsol_;
 
   //  edm::EDGetTokenT<GTRecordCollection> Token1_;
   edm::EDGetTokenT<EcalTrigPrimDigiCollection> tpCollection1_ ;
@@ -190,6 +191,8 @@ private:
   //  edm::EDGetTokenT<l1extra::L1EmParticleCollection.l1extraParticles> l1extraParticles1_ ;
   edm::EDGetTokenT<EcalRecHitCollection> EcalRecHitCollectionEB1_  ;
   edm::EDGetTokenT<EcalRecHitCollection> EcalRecHitCollectionEE1_  ;
+  edm::EDGetTokenT<l1extra::L1EmParticleCollection> l1extraIsolT_  ;
+  edm::EDGetTokenT<l1extra::L1EmParticleCollection> l1extraNonIsolT_  ;
 
 
   bool allowTP_ ;

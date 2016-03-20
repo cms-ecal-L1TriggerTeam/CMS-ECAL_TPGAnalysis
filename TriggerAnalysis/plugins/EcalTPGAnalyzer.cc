@@ -52,7 +52,6 @@
 
 
 
-
 //L1 Trigger
 #include "L1Trigger/L1ExtraFromDigis/interface/L1ExtraParticleMapProd.h"
 
@@ -75,11 +74,19 @@
 #include <TMath.h>
 #include <sstream>
 
+//#define DEBUG
+
 using namespace edm;
+using namespace std;
 class CaloSubdetectorGeometry;
 
 EcalTPGAnalyzer::EcalTPGAnalyzer(const edm::ParameterSet&  iConfig)
 {
+
+#ifdef DEBUG
+cout<<"in constructor"<<endl;
+#endif
+
     noL1Info = false;
 
     tpCollection_ = iConfig.getParameter<edm::InputTag>("TPCollection") ;
@@ -89,7 +96,9 @@ EcalTPGAnalyzer::EcalTPGAnalyzer(const edm::ParameterSet&  iConfig)
     gtRecordCollectionTag_ = iConfig.getParameter<std::string>("GTRecordCollection") ;
     EcalRecHitCollectionEB_ = iConfig.getParameter<edm::InputTag>("EcalRecHitCollectionEB") ;
     EcalRecHitCollectionEE_ = iConfig.getParameter<edm::InputTag>("EcalRecHitCollectionEE") ;
-    //    l1extraParticles_ =  iConfig.getParameter<edm::InputTag>("l1extraParticles.Isolated");
+    l1extraIsol_ =iConfig.getParameter<edm::InputTag> ("l1extraIsol");
+    l1extraNonIsol_ =iConfig.getParameter<edm::InputTag> ("l1extraNonIsol");
+
 
 
     tpCollection1_ = consumes<EcalTrigPrimDigiCollection>( iConfig.getParameter<edm::InputTag>("TPCollection") );
@@ -99,8 +108,9 @@ EcalTPGAnalyzer::EcalTPGAnalyzer(const edm::ParameterSet&  iConfig)
     gtRecordCollectionTag1_ = consumes<L1GlobalTriggerReadoutRecord>( iConfig.getParameter<std::string>("GTRecordCollection") );
     EcalRecHitCollectionEB1_ = consumes<EcalRecHitCollection>( iConfig.getParameter<edm::InputTag>("EcalRecHitCollectionEB") );
     EcalRecHitCollectionEE1_ = consumes<EcalRecHitCollection>( iConfig.getParameter<edm::InputTag>("EcalRecHitCollectionEE") );
-    //    l1extraParticles1_ = consumes<l1extra::L1EmParticleCollection.l1extraParticles>( iConfig.getParameter<edm::InputTag>("Isolated") );
-  
+    l1extraIsolT_  = consumes<l1extra::L1EmParticleCollection>( iConfig.getParameter<edm::InputTag>("l1extraIsol") );
+    l1extraNonIsolT_  = consumes<l1extra::L1EmParticleCollection>( iConfig.getParameter<edm::InputTag>("l1extraNonIsol") );
+
   
     allowTP_ = iConfig.getParameter<bool>("ReadTriggerPrimitives");
     useEE_ = iConfig.getParameter<bool>("UseEndCap");
@@ -112,6 +122,10 @@ EcalTPGAnalyzer::EcalTPGAnalyzer(const edm::ParameterSet&  iConfig)
     // file
     file_ = new TFile("ECALTPGtree.root","RECREATE");
     file_->cd() ;
+
+#ifdef DEBUG
+cout<<"past the cd() call to file_"<<endl;
+#endif
   
     // trees
     tree_ = new TTree( "EcalTPGAnalysis","EcalTPGAnalysis" );
@@ -238,6 +252,9 @@ EcalTPGAnalyzer::EcalTPGAnalyzer(const edm::ParameterSet&  iConfig)
     tree_->Branch("trig_tower_adc",  &treeVariables_.twrADC,  "twrADC[nbOfTowers]/I");
     tree_->Branch("trig_tower_sFGVB",  &treeVariables_.sFGVB,  "sFGVB[nbOfTowers]/I");
 
+#ifdef DEBUG
+cout<<"declared tree branches"<<endl;
+#endif
   
 
 }
@@ -274,8 +291,11 @@ void EcalTPGAnalyzer::analyze(const edm::Event& iEvent, const  edm::EventSetup &
     using namespace std;
 
     myevt++;
-    // cout << " analyze myevt = " << myevt << endl;
+    #ifdef DEBUG    
+    cout << " in analyze method \t analyze myevt = " << myevt << endl;
+    #endif
 
+    
     if ( myevt == 1)
     {
 
@@ -353,7 +373,7 @@ void EcalTPGAnalyzer::analyze(const edm::Event& iEvent, const  edm::EventSetup &
         // Storing eta and phi of masked TT to 'treeAux' root tree
         treeAux->Fill() ;
 
-
+    
 
         // geometry
         ESHandle<CaloGeometry> theGeometry;
@@ -391,8 +411,8 @@ void EcalTPGAnalyzer::analyze(const edm::Event& iEvent, const  edm::EventSetup &
                     }
         treeVariables_.nMaskedRCT = nMaskedRCT;
 
-    }
-
+}
+    
 
     map<EcalTrigTowerDetId, towerEner> mapTower ;
     map<EcalTrigTowerDetId, towerEner>::iterator itTT ;
@@ -414,6 +434,9 @@ void EcalTPGAnalyzer::analyze(const edm::Event& iEvent, const  edm::EventSetup &
 
     treeVariablesShape_.evtNb = iEvent.id().event() ;
 
+#ifdef DEBUG
+cout<<"obtained basic event vars like run and event number"<<endl;
+#endif
 
   
     //===================TIMESTAMP INFORMTION=================================
@@ -431,7 +454,7 @@ void EcalTPGAnalyzer::analyze(const edm::Event& iEvent, const  edm::EventSetup &
     // print_ = true;
     if (print_)
       std::cout<<"==========="<<iEvent.id()<<"   bxNb:"<<iEvent.bunchCrossing()<<" orbit:"<<iEvent.orbitNumber()<<std::endl ;
-
+    
 
     if (!noL1Info) {
     ///////////////////////////
@@ -440,10 +463,11 @@ void EcalTPGAnalyzer::analyze(const edm::Event& iEvent, const  edm::EventSetup &
 
       edm::Handle< l1extra::L1EmParticleCollection > emNonisolColl ;
       // iEvent.getByToken(Token1_, emNonisolColl ) ;
-      iEvent.getByLabel("l1extraParticles","NonIsolated", emNonisolColl ) ;
+      iEvent.getByLabel(l1extraNonIsol_, emNonisolColl ) ;
+
       edm::Handle< l1extra::L1EmParticleCollection > emIsolColl ;
       //iEvent.getByToken(Token1_, emIsolColl ) ;
-      iEvent.getByLabel("l1extraParticles","Isolated", emIsolColl ) ;
+      iEvent.getByLabel(l1extraIsol_, emIsolColl ) ;
       
 
       if (L1print_)  std::cout << "iso size " << emIsolColl->size() << std::endl;
@@ -476,6 +500,11 @@ void EcalTPGAnalyzer::analyze(const edm::Event& iEvent, const  edm::EventSetup &
       
       
     }
+#ifdef DEBUG
+cout<<"obtained L1 event infor"<<endl;
+#endif
+
+    
     ///////////////////////////
     // get L1 Trigger info
     ///////////////////////////
@@ -492,6 +521,10 @@ void EcalTPGAnalyzer::analyze(const edm::Event& iEvent, const  edm::EventSetup &
 
     //    std::cout<<"dword size"<<dWord.capacity()<<std::endl;
     // std::cout<<"t size"<<triggerMaskAlgoTrig.size()<<std::endl;
+#ifdef DEBUG
+cout<<"obtained handles"<<endl;
+#endif
+
 
     int hashedTr[128];
     for ( int i = 0; i < 128; ++i )
@@ -517,7 +550,6 @@ void EcalTPGAnalyzer::analyze(const edm::Event& iEvent, const  edm::EventSetup &
             }
         }
     }
-
 
 
     // apply masks on algo    
@@ -560,6 +592,10 @@ void EcalTPGAnalyzer::analyze(const edm::Event& iEvent, const  edm::EventSetup &
     }
 
 
+#ifdef DEBUG
+cout<<"obtained active trigger info"<<endl;
+#endif
+
     //PRE-FIRING INFO
     const L1GtPsbWord psb = gtRecord->gtPsbWord(0xbb0d, -1);
     //psb.print(cout); 
@@ -587,6 +623,10 @@ void EcalTPGAnalyzer::analyze(const edm::Event& iEvent, const  edm::EventSetup &
         //}
     }//loop Noniso
     //treeVariables_.nbOfL1preNonisoCands = isocounter1;
+
+#ifdef DEBUG
+cout<<"obtained pre info"<<endl;
+#endif
 
     psbel.clear();
     psbel.push_back(psb.aData(6));
@@ -719,7 +759,7 @@ void EcalTPGAnalyzer::analyze(const edm::Event& iEvent, const  edm::EventSetup &
     //treeVariables_.nbOfL1postIsoCands = isocounter1;
  
 
-
+    
 
 
 
@@ -742,6 +782,8 @@ void EcalTPGAnalyzer::analyze(const edm::Event& iEvent, const  edm::EventSetup &
 	tE.ttFlag_ = d[0].ttFlag();
         tE.tpgADC_ = (d[0].raw()&0xfff) ;
 	tE.twrADC = (d[0].raw()&0xff) ;
+	//	cout<<"TTF Flag "<<tE.ttFlag_<<" ieta "<<tE.ieta_<<" iphi "<< tE.iphi_<<endl;
+	
 	// if ((d[0].raw()&0xfff)!=0 ||  (d[0].raw()&0xff)!=0){
 	//   if (fabs(TPtowid.ieta()) < 18 && d[0].sFGVB()==0) {
 	//       std::cout << i  << " evt:" << myevt<<  " adc size: " << d[0].raw() <<  " tpgADC: " << (d[0].raw()&0xfff) << " twrADC: " << (d[0].raw()&0xff)  <<  " sFGVB: " << d[0].sFGVB() <<   " eta: " << TPtowid.ieta() << endl; 
@@ -811,8 +853,64 @@ void EcalTPGAnalyzer::analyze(const edm::Event& iEvent, const  edm::EventSetup &
         }
     }
 
+    ///////////////////////////
+    // Get rechits and spikes
+    ///////////////////////////
 
-    if (useEE_) {
+    edm::ESHandle<EcalSeverityLevelAlgo> sevlv;
+    iSetup.get<EcalSeverityLevelAlgoRcd>().get(sevlv);
+
+
+    
+    // channel status
+    edm::ESHandle<EcalChannelStatus> pChannelStatus;
+    iSetup.get<EcalChannelStatusRcd>().get(pChannelStatus);
+  
+
+    //  const EcalChannelStatus *chStatus = pChannelStatus.product();
+    //const EcalRecHit * rh; 
+   
+    // Get EB rechits
+    edm::Handle<EcalRecHitCollection> rechitsEB; 
+    //    iEvent.getByLabel(EcalRecHitCollectionEB_, rechitsEB) ;
+    iEvent.getByToken(EcalRecHitCollectionEB1_,rechitsEB); 
+    //std::cout << " rechitsEB size " << rechitsEB.product()->size() << std::endl;
+    float maxRecHitEnergy = 0. ;
+    if (rechitsEB.product()->size()!=0) {
+      for ( EcalRecHitCollection::const_iterator rechitItr = rechitsEB->begin(); rechitItr != rechitsEB->end(); ++rechitItr ) {   
+	EBDetId id = rechitItr->id(); 
+	const EcalTrigTowerDetId towid = id.tower();
+	itTT = mapTower.find(towid) ;
+
+	if (itTT != mapTower.end()) {
+	       
+	  double theta = theBarrelGeometry_->getGeometry(id)->getPosition().theta() ;
+	  (itTT->second).eRec_ += rechitItr->energy()*sin(theta) ;
+	  if (maxRecHitEnergy < rechitItr->energy()*sin(theta) && rechitItr->energy()*sin(theta) > 1. ){
+	    (itTT->second).sevlv_ = sevlv->severityLevel(id, *rechitsEB); 
+
+	  }
+	  //(itTT->second).sevlv = sevlv->severityLevel(*rh); 
+	  //cout << "severity level barrel " << sevlv->severityLevel(id, *rechitsEB) << endl; 
+	  (itTT->second).crystNb_++;
+	}
+
+	//  uint32_t sev = sevlv->severityLevel( id, *rechitsEB);
+	//sevlv->severityLevel( id, *rechitsEB);
+	    
+	/*
+              if (sev == EcalSeverityLevelAlgo::kWeird) {
+              itTT = mapTower.find(towid) ;
+              if (itTT != mapTower.end()) {
+              (itTT->second).spike_++ ;  
+              }
+              }
+	*/
+      }
+    }
+
+
+    if (0) {
         // Get EE xtal digi inputs
         edm::Handle<EEDigiCollection> digiEE;
 	//        iEvent.getByLabel(digiCollectionEE_, digiEE);
@@ -851,91 +949,13 @@ void EcalTPGAnalyzer::analyze(const edm::Event& iEvent, const  edm::EventSetup &
         }  // loop over EE digi
     } // UseEE_
 
-    ///////////////////////////
-    // Get rechits and spikes
-    ///////////////////////////
-
-    edm::ESHandle<EcalSeverityLevelAlgo> sevlv;
-    iSetup.get<EcalSeverityLevelAlgoRcd>().get(sevlv);
-
-
-    
-    // channel status
-    edm::ESHandle<EcalChannelStatus> pChannelStatus;
-    iSetup.get<EcalChannelStatusRcd>().get(pChannelStatus);
-  
-
-    //  const EcalChannelStatus *chStatus = pChannelStatus.product();
-    //const EcalRecHit * rh; 
-   
-    // Get EB rechits
-    edm::Handle<EcalRecHitCollection> rechitsEB; 
-    //    iEvent.getByLabel(EcalRecHitCollectionEB_, rechitsEB) ;
-    iEvent.getByToken(EcalRecHitCollectionEB1_,rechitsEB); 
-   //std::cout << " rechitsEB size " << rechitsEB.product()->size() << std::endl;
-    float maxRecHitEnergy = 0. ;
-    if (rechitsEB.product()->size()!=0) {
-      for ( EcalRecHitCollection::const_iterator rechitItr = rechitsEB->begin(); rechitItr != rechitsEB->end(); ++rechitItr ) {   
-            EBDetId id = rechitItr->id(); 
-            const EcalTrigTowerDetId towid = id.tower();
-            itTT = mapTower.find(towid) ;
-
-            if (itTT != mapTower.end()) {
-	     
-	      double theta = theBarrelGeometry_->getGeometry(id)->getPosition().theta() ;
-                (itTT->second).eRec_ += rechitItr->energy()*sin(theta) ;
-		if (maxRecHitEnergy < rechitItr->energy()*sin(theta) && rechitItr->energy()*sin(theta) > 1. ){
-		  (itTT->second).sevlv_ = sevlv->severityLevel(id, *rechitsEB); 
-
-		}
-		//(itTT->second).sevlv = sevlv->severityLevel(*rh); 
-		//cout << "severity level barrel " << sevlv->severityLevel(id, *rechitsEB) << endl; 
-		(itTT->second).crystNb_++;
-            }
-
-          //  uint32_t sev = sevlv->severityLevel( id, *rechitsEB);
-            //sevlv->severityLevel( id, *rechitsEB);
-	    
-            /*
-              if (sev == EcalSeverityLevelAlgo::kWeird) {
-              itTT = mapTower.find(towid) ;
-              if (itTT != mapTower.end()) {
-              (itTT->second).spike_++ ;  
-              }
-              }
-            */
-        }
-    }
-
-    // Get EE rechits
-    edm::Handle<EcalRecHitCollection> rechitsEE; 
-    //    if (iEvent.getByLabel(EcalRecHitCollectionEE_, rechitsEE) ) {
-    if (iEvent.getByToken(EcalRecHitCollectionEE1_, rechitsEE) ) {
-      
-        for ( EcalRecHitCollection::const_iterator rechitItr = rechitsEE->begin(); rechitItr != rechitsEE->end(); ++rechitItr ) {   
-            EEDetId id = rechitItr->id();
-            const EcalTrigTowerDetId towid = (*eTTmap_).towerOf(id);
-            itTT = mapTower.find(towid) ;
-            if (itTT != mapTower.end()) {
-                double theta = theEndcapGeometry_->getGeometry(id)->getPosition().theta() ;
-                (itTT->second).eRec_ += rechitItr->energy()*sin(theta) ;
-		//rh = &*rechitItr;
-		(itTT->second).sevlv_ = sevlv->severityLevel(id, *rechitsEE); 
-		//cout << "severity level endcap " << sevlv->severityLevel(id, *rechitsEE) << endl;
-            }
-        }
-    }
-
-
-
-
     ///////////////////////////  
     // fill tree
     ///////////////////////////  
-    
+
     int towerNb = 0 ;
     for (itTT = mapTower.begin() ; itTT != mapTower.end() ; ++itTT) {
-       
+
         // select only non zero towers
         bool fill(true) ;
         bool nonZeroEmul(false) ;
@@ -947,6 +967,7 @@ void EcalTPGAnalyzer::analyze(const edm::Event& iEvent, const  edm::EventSetup &
             std::cout<<" nbXtal="<<(itTT->second).nbXtal_ ;
             std::cout<<std::endl ;      
         }
+	fill=true;
         if (fill) {
             treeVariables_.ieta[towerNb] = (itTT->second).ieta_ ;
             treeVariables_.iphi[towerNb] = (itTT->second).iphi_ ;
