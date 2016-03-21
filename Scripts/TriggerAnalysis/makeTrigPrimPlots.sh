@@ -143,7 +143,7 @@ fi
 if [ "X"${HTMLDIR} == "X" ]
     then
    # HTMLDIR=/afs/cern.ch/user/c/ccecal/scratch0/www/TPGAnalysis/Commissioning2015
-    HTMLDIR=/afs/cern.ch/work/n/ndev/CMSSW_7_5_6/src/CMS-ECAL_TPGAnalysis/Scripts/TriggerAnalysis/Commissioning2016
+    HTMLDIR=${CMSSW_BASE}/src/CMS-ECAL_TPGAnalysis/Scripts/TriggerAnalysis/Commissioning2016
     echo "using default HTMLDIR:" $HTMLDIR
 fi
 

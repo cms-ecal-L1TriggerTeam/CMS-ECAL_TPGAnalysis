@@ -1,8 +1,20 @@
 #!/bin/env python
+
 import os 
-path='/afs/cern.ch/work/n/ndev/CMSSW_7_5_6/src/CMS-ECAL_TPGAnalysis/Scripts/TriggerAnalysis/Commissioning2016/254833_test_package_eg12'
+import argparse
+
+ 
+parser = argparse.ArgumentParser(description='Script to convert png plots to jpg thumbnails.')
+parser.add_argument('-r','--runnumber', help='Run number',required=True)
+parser.add_argument('-a','--addendum',help='Addendum to differentiate different running conditions', required=True)
+args=parser.parse_args()
+
+cmssw_base= os.environ['CMSSW_BASE']
 
 
+path=cmssw_base+'/src/CMS-ECAL_TPGAnalysis/Scripts/TriggerAnalysis/Commissioning2016/'+str(args.runnumber)+'_'+str(args.addendum)
+
+print path
 
 for file in os.listdir(path):
     current_file = os.path.join(path, file)
