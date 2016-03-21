@@ -52,7 +52,7 @@ In particular the files you need to modify are : `mergeTPGAnalysis.sh; makeTrigP
 
   The plots will be created in the folder: `Scripts/TriggerAnalysis/Commisioning2016`
   
-  To make thumbnails: `python convertAllPlots.py`
+  To make thumbnails: `python convertAllPlots.py  -r 266423 -a testing_eg12`
 
   Copy it to your html_folder to look at it on the web.
   
