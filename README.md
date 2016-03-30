@@ -32,7 +32,7 @@ In particular the files you need to modify are : `mergeTPGAnalysis.sh; makeTrigP
   This has been tested on lxplus. After you have changed all the pathnames above:
   
   To run, e.g. on 266423 ZeroBias dataset
-  ```./runTPGbatch_AAA.sh lxbatch 266423 /ZeroBias/Run2015C-v1/RAW  74X_dataRun2_Prompt_v1  -1 False```
+  ```./runTPGbatch_AAA.sh lxbatch 266423   /Cosmics/Commissioning2016-v1/RAW  80X_dataRun2_HLT_v6 -1 False```
   
   i.e.```./runTPGbatch_AAA.sh  lxbatch  run_number  das_dataset_path Global_Tag  Num_of_events_to_be_processed(-1 defaults to all events) MC_or_data(False for data)```
   

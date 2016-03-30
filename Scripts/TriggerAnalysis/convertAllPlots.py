@@ -6,13 +6,15 @@ import argparse
  
 parser = argparse.ArgumentParser(description='Script to convert png plots to jpg thumbnails.')
 parser.add_argument('-r','--runnumber', help='Run number',required=True)
-parser.add_argument('-a','--addendum',help='Addendum to differentiate different running conditions', required=True)
+parser.add_argument('-a','--addendum',help='Addendum to differentiate different running conditions', required=False)
 args=parser.parse_args()
 
 cmssw_base= os.environ['CMSSW_BASE']
 
-
-path=cmssw_base+'/src/CMS-ECAL_TPGAnalysis/Scripts/TriggerAnalysis/Commissioning2016/'+str(args.runnumber)+'_'+str(args.addendum)
+if (None==args.addendum):
+    path=cmssw_base+'/src/CMS-ECAL_TPGAnalysis/Scripts/TriggerAnalysis/Commissioning2016/'+str(args.runnumber)
+else:
+    path=cmssw_base+'/src/CMS-ECAL_TPGAnalysis/Scripts/TriggerAnalysis/Commissioning2016/'+str(args.runnumber)+'_'+str(args.addendum)
 
 print path
 
