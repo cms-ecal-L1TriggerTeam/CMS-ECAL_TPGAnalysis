@@ -3389,7 +3389,7 @@ int main (int argc, char** argv)
 	  if (maxOfTPEmul>occupancyCut) {
            
             if(ieta<=-18)      TPEmulMaxIndexEEMinus->Fill(indexOfTPEmulMax+1) ;
-            else if(ieta<18)    TPEmulMaxIndexEB->Fill(indexOfTPEmulMax+1) ;
+            else if(abs(ieta)<18)    TPEmulMaxIndexEB->Fill(indexOfTPEmulMax+1) ;
             else if(ieta>=18)   TPEmulMaxIndexEEPlus->Fill(indexOfTPEmulMax+1) ;
 	  }
 	
